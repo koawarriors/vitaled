@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VitalEd - Madigan Army Medical Center Training Platform">
+    <title>VitalEd - Madigan Army Medical Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c5530;
+            --primary-dark: #1a3a1d;
+            --accent: #c41e3a;
+            --success: #16a34a;
+            --warning: #eab308;
+            --info: #0891b2;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light-gray: #f1f5f9;
+            --white: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --military-green: #4a5d23;
+            --military-tan: #d2b48c;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Login Screen - Military Theme */
+        .login-container {
+            display: flex;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2c5530 0%, #4a5d23 100%);
+        }
+
+        .login-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            color: white;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .military-insignia {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            margin-bottom: 30px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .login-brand h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-brand .subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .login-brand .tagline {
+            font-size: 1.1em;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        .login-right {
+            width: 480px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            background: white;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .login-header {
+            margin-bottom: 40px;
+        }
+
+        .login-header h2 {
+            font-size: 2em;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 85, 48, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--light-gray);
+            color: var(--text-primary);
+        }
+
+        .btn-danger {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+            background: #f8fafc;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 280px;
+            background: var(--primary);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-logo {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-logo .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .sidebar-logo .logo-text {
+            flex: 1;
+        }
+
+        .sidebar-logo .logo-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            display: block;
+        }
+
+        .sidebar-logo .logo-subtitle {
+            font-size: 0.75em;
+            opacity: 0.8;
+            display: block;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 24px 0;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--military-tan);
+        }
+
+        .nav-icon {
+            width: 20px;
+            margin-right: 12px;
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--military-tan);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .user-info {
+            flex: 1;
+            color: white;
+        }
+
+        .user-info .user-name {
+            font-weight: 600;
+            display: block;
+        }
+
+        .user-info .user-role {
+            font-size: 0.85em;
+            opacity: 0.8;
+            display: block;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 16px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        /* Military-specific sections */
+        .military-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--military-green) 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .military-banner-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+        }
+
+        .military-banner-content h2 {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .stat-card-title {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .stat-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+
+        .stat-card-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-card-change {
+            font-size: 0.85em;
+            color: var(--success);
+        }
+
+        /* Training Modules */
+        .training-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .training-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .training-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .training-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--military-green) 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .training-icon {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+        }
+
+        .training-title {
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .training-content {
+            padding: 20px;
+        }
+
+        .training-description {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .training-meta {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 0.85em;
+            color: var(--text-secondary);
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .priority-high {
+            background: rgba(196, 30, 58, 0.1);
+            color: var(--accent);
+        }
+
+        .priority-medium {
+            background: rgba(234, 179, 8, 0.1);
+            color: var(--warning);
+        }
+
+        .priority-low {
+            background: rgba(16, 163, 74, 0.1);
+            color: var(--success);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+            }
+
+            .login-left {
+                display: none;
+            }
+
+            .login-right {
+                width: 100%;
+            }
+
+            .military-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .stats-grid,
+            .training-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-left">
+            <div class="military-insignia">⚕️</div>
+            <div class="login-brand">
+                <h1>VitalEd</h1>
+                <div class="subtitle">Madigan Army Medical Center</div>
+                <div class="tagline">"America's Medical Force"</div>
+            </div>
+        </div>
+        <div class="login-right">
+            <div class="login-card">
+                <div class="login-header">
+                    <h2>Military Medical Training Portal</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.95em;">Madigan Army Medical Center</p>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Service Branch</label>
+                        <select id="branch" required>
+                            <option value="">Select Branch</option>
+                            <option value="army">U.S. Army</option>
+                            <option value="navy">U.S. Navy</option>
+                            <option value="air-force">U.S. Air Force</option>
+                            <option value="marines">U.S. Marines</option>
+                            <option value="space-force">U.S. Space Force</option>
+                            <option value="coast-guard">U.S. Coast Guard</option>
+                            <option value="civilian">DoD Civilian</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>DoD ID Number</label>
+                        <input type="text" id="dodId" placeholder="Enter your DoD ID" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Access Training Portal
+                    </button>
+                    <div style="text-align: center; margin-top: 24px;">
+                        <a href="#" onclick="loginAsInstructor()" style="color: var(--primary); text-decoration: none; font-weight: 500;">Instructor Access →</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="sidebar-logo">
+                    <div class="logo-icon">⚕️</div>
+                    <div class="logo-text">
+                        <span class="logo-title">VitalEd</span>
+                        <span class="logo-subtitle">Madigan AMC</span>
+                    </div>
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item active" onclick="showSection('overview')">
+                    <span class="nav-icon">📊</span>
+                    Overview
+                </a>
+                <a class="nav-item" onclick="showSection('combat-medicine')">
+                    <span class="nav-icon">🏥</span>
+                    Combat Medicine
+                </a>
+                <a class="nav-item" onclick="showSection('trauma')">
+                    <span class="nav-icon">🚑</span>
+                    Trauma Training
+                </a>
+                <a class="nav-item" onclick="showSection('tccc')">
+                    <span class="nav-icon">🎖️</span>
+                    TCCC Certification
+                </a>
+                <a class="nav-item" onclick="showSection('simulations')">
+                    <span class="nav-icon">🎮</span>
+                    Simulations
+                </a>
+                <a class="nav-item" onclick="showSection('readiness')">
+                    <span class="nav-icon">✅</span>
+                    Readiness Status
+                </a>
+                <a class="nav-item" onclick="showSection('resources')">
+                    <span class="nav-icon">📚</span>
+                    Resources
+                </a>
+                <a class="nav-item" onclick="showSection('evaluations')">
+                    <span class="nav-icon">📝</span>
+                    Evaluations
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar" id="userAvatar">JS</div>
+                    <div class="user-info">
+                        <span class="user-name" id="userName">SSG Smith</span>
+                        <span class="user-role">68W Combat Medic</span>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="width: 100%; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2);" onclick="logout()">
+                    Sign Out
+                </button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="top-bar">
+                <div style="flex: 1;">
+                    <h2 style="font-size: 1.3em; color: var(--text-primary); margin: 0;">Military Medical Training System</h2>
+                </div>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <span style="color: var(--text-secondary); font-size: 0.9em;">Last Sync: 0800 hrs</span>
+                    <button class="btn btn-primary">Emergency Protocols</button>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- Overview Section -->
+                <div id="overview">
+                    <div class="military-banner">
+                        <div class="military-banner-icon">🎖️</div>
+                        <div class="military-banner-content">
+                            <h2>Welcome to Madigan Army Medical Center Training</h2>
+                            <p>Maintaining medical readiness through excellence in training</p>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-card-title">Training Hours</span>
+                                <div class="stat-card-icon" style="background: rgba(44, 85, 48, 0.1); color: var(--primary);">⏱️</div>
+                            </div>
+                            <div class="stat-card-value">247</div>
+                            <div class="stat-card-change">Annual requirement: 256 hrs</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-card-title">Certifications</span>
+                                <div class="stat-card-icon" style="background: rgba(16, 163, 74, 0.1); color: var(--success);">📜</div>
+                            </div>
+                            <div class="stat-card-value">12/15</div>
+                            <div class="stat-card-change">3 expiring soon</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-card-title">Readiness Score</span>
+                                <div class="stat-card-icon" style="background: rgba(234, 179, 8, 0.1); color: var(--warning);">🎯</div>
+                            </div>
+                            <div class="stat-card-value">94%</div>
+                            <div class="stat-card-change">Above unit average</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-card-title">Next Evaluation</span>
+                                <div class="stat-card-icon" style="background: rgba(196, 30, 58, 0.1); color: var(--accent);">📅</div>
+                            </div>
+                            <div class="stat-card-value">14 Days</div>
+                            <div class="stat-card-change">Annual Medical Assessment</div>
+                        </div>
+                    </div>
+
+                    <h2 style="margin: 32px 0 24px; color: var(--text-primary);">Required Training Modules</h2>
+                    <div class="training-grid">
+                        <div class="training-card">
+                            <div class="training-header">
+                                <div class="training-icon">🩹</div>
+                                <div class="training-title">Tactical Combat Casualty Care</div>
+                            </div>
+                            <div class="training-content">
+                                <div class="training-description">
+                                    Advanced life-saving techniques for combat environments. Covers hemorrhage control, airway management, and casualty evacuation procedures.
+                                </div>
+                                <div class="training-meta">
+                                    <span>Duration: 16 hrs</span>
+                                    <span class="priority-badge priority-high">High Priority</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="training-card">
+                            <div class="training-header">
+                                <div class="training-icon">💉</div>
+                                <div class="training-title">Advanced Trauma Life Support</div>
+                            </div>
+                            <div class="training-content">
+                                <div class="training-description">
+                                    Comprehensive trauma management protocols for military medical personnel. Includes mass casualty triage and emergency surgical procedures.
+                                </div>
+                                <div class="training-meta">
+                                    <span>Duration: 24 hrs</span>
+                                    <span class="priority-badge priority-high">High Priority</span>
+                                </div>
+                            </div>
